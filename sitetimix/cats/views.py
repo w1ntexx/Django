@@ -4,6 +4,9 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify, first
 
+desc = '''Абиссинская порода — это элегантные кошки средних размеров с сильными грациозными телами и длинными стройными лапами. Для этой породы характерны округлая клиновидная форма головы с большими миндалевидными глазами и уши с небольшими кисточками на кончиках. Короткая прилегающая шерсть абиссинской кошки отличается тикингом — смешением цветов на каждом из волосков. Наиболее популярный окрас — «дикий» (ruddy), но также встречаются и другие виды.</p>>
+'''
+
 menu = [{'title': 'О сайте', 'url_name': 'about'},
         {'title': 'Добавить статью', 'url_name': 'add_page'},
         {'title': 'Обратная связь', 'url_name': 'contact'},
@@ -11,8 +14,8 @@ menu = [{'title': 'О сайте', 'url_name': 'about'},
         ]
 
 data_db = [
-    {'id': 1, 'title': "Абиссинская кошка", 'content': "Описание Абиссинской кошки", 'is_published': True},
-    {'id': 2, 'title': "Австралийский мист", 'content': "Описание Австралийского миста", 'is_published': False},
+    {'id': 1, 'title': "Абиссинская кошка", 'content': desc, 'is_published': True},
+    {'id': 2, 'title': "Австралийский мист", 'content': "Описание Австралийского миста", 'is_published': True},
     {'id': 3, 'title': "Сноу-шу", 'content': "Описание Сноу-шу", 'is_published': True},
 ]
 
