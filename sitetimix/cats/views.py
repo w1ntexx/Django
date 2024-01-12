@@ -22,7 +22,7 @@ menu = [
 # data_db  Имитация в учебных целях базы данных, с которой мы работаем в шаблоне
 data_db = [
     {"id": 1, "title": "Абиссинская кошка", "content": desc, "is_published": True},
-    {"id": 2,"title": "Австралийский мист","content": "Описание Австралийского миста",
+    {"id": 2, "title": "Австралийский мист", "content": "Описание Австралийского миста",
         "is_published": True,},
     {"id": 3, "title": "Сноу-шу", "content": "Описание Сноу-шу", "is_published": True},
 ]
@@ -78,6 +78,7 @@ def show_category(request, cat_id):
         "cat_selected": cat_id,
     }
     return render(request, "cats/index.html", context=data)
+
 
 def page_not_found(request, exception):
     return HttpResponseNotFound(f"<h1>Страница не найдена</h1>")
