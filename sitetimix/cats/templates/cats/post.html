@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<h1 align="center">{{ post.title }}</h1>
+
+{% if post.photo %}
+    <p><img class="img-article-left" src={{post.photo.url}}></p>
+{% endif %}
+
+
+{% comment %} {{ post.content|linebreaks}} {% endcomment %}
+<p align="center">{{ post.content }}</p>
+{% endblock %}
+

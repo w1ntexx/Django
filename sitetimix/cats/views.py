@@ -4,10 +4,11 @@ from django.http import (
     Http404,
     HttpResponseRedirect,
 )
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify, first
+from cats.models import Cat
 
 desc = """  Абиссинская порода — это элегантные кошки средних размеров с сильными грациозными телами и длинными стройными лапами. Для этой породы характерны округлая клиновидная форма головы с большими миндалевидными глазами и уши с небольшими кисточками на кончиках. Короткая прилегающая шерсть абиссинской кошки отличается тикингом — смешением цветов на каждом из волосков. Наиболее популярный окрас — «дикий» (ruddy), но также встречаются и другие виды.</p>>
 """
@@ -20,12 +21,12 @@ menu = [
 ]
 
 # data_db  Имитация в учебных целях базы данных, с которой мы работаем в шаблоне
-data_db = [
-    {"id": 1, "title": "Абиссинская кошка", "content": desc, "is_published": True},
-    {"id": 2, "title": "Австралийский мист", "content": "Описание Австралийского миста",
-        "is_published": True,},
-    {"id": 3, "title": "Сноу-шу", "content": "Описание Сноу-шу", "is_published": True},
-]
+# data_db = [
+#     {"id": 1, "title": "Абиссинская кошка", "content": desc, "is_published": True},
+#     {"id": 2, "title": "Австралийский мист", "content": "Описание Австралийского миста",
+#         "is_published": True,},
+#     {"id": 3, "title": "Сноу-шу", "content": "Описание Сноу-шу", "is_published": True},
+# ]
 
 
 categories_db = [
@@ -37,10 +38,12 @@ categories_db = [
 
 # Главная страница, которая рендрит шаблон index.html
 def index(request):
+    posts = Cat.published.all().order_by("title")
+    
     data = {
         "title": "Главная страница",
         "menu": menu,
-        "posts": data_db,
+        "posts": posts,
         "cat_selected": 0,
     }
     return render(request, "cats/index.html", data)
@@ -54,8 +57,17 @@ def about(request):
     return render(request, "cats/about.html", context=data)
 
 
-def show_post(request, post_id):
-    return HttpResponse(f"Отоброжение статьи с id = {post_id}")
+def show_post(request, post_slug):
+    post = get_object_or_404(Cat, slug=post_slug)
+    
+    data = {
+        'title': post.title,
+        'menu': menu,
+        'post': post,
+        'cat_selected': 1,
+    }
+    
+    return render(request, "cats/post.html", data)
 
 
 def add_page(request):
