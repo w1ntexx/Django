@@ -94,3 +94,5 @@ def show_category(request, cat_id):
 
 def page_not_found(request, exception):
     return HttpResponseNotFound(f"<h1>Страница не найдена</h1>")
+
+

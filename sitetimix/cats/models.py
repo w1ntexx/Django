@@ -8,12 +8,12 @@ class PublishedManager(models.Manager): # переопределили стан�
         return super().get_queryset().filter(is_published=Cat.Status.PUBLISHED)
 
 class Cat(models.Model):
-    # Последовательность полей по умолчанию будет последовательной
+    
     class Status(models.IntegerChoices):
         DRAFT = 0, "Черновик"
         PUBLISHED = 1, "Опубликовано"
         
-    
+    # Последовательность полей по умолчанию будет последовательной
     title = models.CharField(max_length=255)  # однострочный
     slug = models.SlugField(max_length=255, unique=True, db_index=True) 
     content = models.TextField(blank=True)  # многострочный TEXT, поле может быть пустым
@@ -38,4 +38,4 @@ class Cat(models.Model):
     def get_absolute_url(self):
         return reverse('post', kwargs={'post_slug': self.slug}) 
     
-       
+
