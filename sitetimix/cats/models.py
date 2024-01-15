@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 # https://docs.djangoproject.com/en/4.2/ref/models/fields/
 
@@ -19,8 +20,12 @@ class Cat(models.Model):
     content = models.TextField(blank=True)  # многострочный TEXT, поле может быть пустым
     time_create = models.DateTimeField(auto_now_add=True)  # НОВАЯ УНИКАЛЬНАЯ запись будет добавлятся автоматически
     time_update = models.DateTimeField(auto_now=True)  # Меняет ТЕКУЩУЮ запись
-    is_published = models.BooleanField(choices=Status.choices, default=Status.PUBLISHED)  # is_published = True по дефолту
-
+    is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
+    # ManyToOne
+    spec = models.ForeignKey("Species", on_delete=models.PROTECT) 
+                                            # "Species" - строка, так как класс определен после текущей модели
+                                            # PROTECT - запрещаем удалять связные записи
+    
     objects = models.Manager() 
     published = PublishedManager()
     
@@ -39,3 +44,9 @@ class Cat(models.Model):
         return reverse('post', kwargs={'post_slug': self.slug}) 
     
 
+class Species(models.Model): # Категория: Породы
+    name = models.CharField(max_length=100, db_index=True) 
+    slug = models.SlugField(max_length=255, unique=True, db_index=True)
+    def __str__(self):
+        return self.name
+    
