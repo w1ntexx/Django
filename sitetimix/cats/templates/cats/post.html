@@ -10,6 +10,8 @@
 
 
 {% comment %} {{ post.content|linebreaks}} {% endcomment %}
+{% if post.title == "Абиссинская кошка"%}
+    <p align="center"><img src="https://www.purina.ru/sites/default/files/styles/nppe_breed_selector_500/public/2020-04/cat_abyssinian_0.jpg?itok=ZVHMdIdD"></p>
+{% endif %}
 <p align="center">{{ post.content|linebreaks }}</p>
 {% endblock %}
-

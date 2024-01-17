@@ -1,7 +1,5 @@
 from django.db import models
 from django.urls import reverse
-from django.utils import timezone
-
 # https://docs.djangoproject.com/en/4.2/ref/models/fields/
 
 class PublishedManager(models.Manager): # переопределили стандартный менеджер "objects"
@@ -13,16 +11,16 @@ class Cat(models.Model):
     class Status(models.IntegerChoices):
         DRAFT = 0, "Черновик"
         PUBLISHED = 1, "Опубликовано"
-        
+
     # Последовательность полей по умолчанию будет последовательной
-    title = models.CharField(max_length=255)  # однострочный
+    title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, db_index=True) 
-    content = models.TextField(blank=True)  # многострочный TEXT, поле может быть пустым
+    content = models.TextField(blank=True)
     time_create = models.DateTimeField(auto_now_add=True)  # НОВАЯ УНИКАЛЬНАЯ запись будет добавлятся автоматически
     time_update = models.DateTimeField(auto_now=True)  # Меняет ТЕКУЩУЮ запись
     is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
     # ManyToOne
-    spec = models.ForeignKey("Species", on_delete=models.PROTECT) 
+    spec = models.ForeignKey("Species", on_delete=models.PROTECT, related_name="posts") 
                                             # "Species" - строка, так как класс определен после текущей модели
                                             # PROTECT - запрещаем удалять связные записи
     
@@ -41,12 +39,18 @@ class Cat(models.Model):
         ]
     
     def get_absolute_url(self):
-        return reverse('post', kwargs={'post_slug': self.slug}) 
+        return reverse('post', kwargs={"post_slug": self.slug}) 
     
 
 class Species(models.Model): # Категория: Породы
     name = models.CharField(max_length=100, db_index=True) 
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
+    
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("species", kwargs={"spec_slug": self.slug})
     
+
+

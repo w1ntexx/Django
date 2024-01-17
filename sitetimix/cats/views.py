@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify, first
-from cats.models import Cat
+from cats.models import Cat, Species
 
 desc = """  Абиссинская порода — это элегантные кошки средних размеров с сильными грациозными телами и длинными стройными лапами. Для этой породы характерны округлая клиновидная форма головы с большими миндалевидными глазами и уши с небольшими кисточками на кончиках. Короткая прилегающая шерсть абиссинской кошки отличается тикингом — смешением цветов на каждом из волосков. Наиболее популярный окрас — «дикий» (ruddy), но также встречаются и другие виды.</p>>
 """
@@ -44,7 +44,7 @@ def index(request):
         "title": "Главная страница",
         "menu": menu,
         "posts": posts,
-        "cat_selected": 0,
+        "spec_selected": 0,
     }
     return render(request, "cats/index.html", data)
 
@@ -64,7 +64,7 @@ def show_post(request, post_slug):
         'title': post.title,
         'menu': menu,
         'post': post,
-        'cat_selected': 1,
+        'spec_selected': 1,
     }
     
     return render(request, "cats/post.html", data)
@@ -82,12 +82,15 @@ def login(request):
     return HttpResponse("Авторизация")
 
 
-def show_category(request, cat_id):
+def show_species(request, spec_slug):
+    species = get_object_or_404(Species, slug=spec_slug) 
+    posts = Cat.published.filter(spec_id=species.pk) 
+    
     data = {
         "title": "Отображение по рубрикам",
         "menu": menu,
-        "posts": data_db,
-        "cat_selected": cat_id,
+        "posts": posts,
+        "spec_selected": species.id,
     }
     return render(request, "cats/index.html", context=data)
 

@@ -1,7 +1,7 @@
-{% for cat in cats%}
-{% if cat.id == cat_selected %}
-<li class="selected">{{ cat.name }}</li>
+{% for spec in specs%}
+{% if spec.pk == spec_selected %}
+<li class="selected">{{ spec.name }}</li>
 {% else %}
-<li><a href="{% url 'category' cat.id%}">{{ cat.name }}</a></li>
+<li><a href="{{ spec.get_absolute_url }}">{{ spec.name }}</a></li>
 {% endif %}
 {% endfor %}
