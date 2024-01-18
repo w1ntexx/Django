@@ -16,13 +16,11 @@ class Cat(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, db_index=True) 
     content = models.TextField(blank=True)
-    time_create = models.DateTimeField(auto_now_add=True)  # НОВАЯ УНИКАЛЬНАЯ запись будет добавлятся автоматически
-    time_update = models.DateTimeField(auto_now=True)  # Меняет ТЕКУЩУЮ запись
+    time_create = models.DateTimeField(auto_now_add=True)
+    time_update = models.DateTimeField(auto_now=True)  
     is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
-    # ManyToOne
     spec = models.ForeignKey("Species", on_delete=models.PROTECT, related_name="posts") 
-                                            # "Species" - строка, так как класс определен после текущей модели
-                                            # PROTECT - запрещаем удалять связные записи
+    tags = models.ManyToManyField("TagPost", blank=True, related_name="tags")                                       
     
     objects = models.Manager() 
     published = PublishedManager()
@@ -54,3 +52,10 @@ class Species(models.Model): # Категория: Породы
     
 
 
+class TagPost(models.Model):
+    tag = models.CharField(max_length=100, db_index=True)
+    slug = models.SlugField(max_length=255, unique=True)
+    
+    
+    def __str__(self):
+        return self.tag
