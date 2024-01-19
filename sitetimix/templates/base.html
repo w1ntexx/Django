@@ -32,17 +32,16 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
-		{% if spec_selected == 0 or spec_selected is None %}
+		{% if spec_selected == 0 %} 
 			<li class="selected">Все породы</li>
 		{% else %}
 			<li><a href="{% url 'home' %}">Все породы</a></li>
 		{% endif %}
 
 		{% show_categories spec_selected%} 
-		{% comment %} <li class="share">
-		<a class="share-yt" href="https://www.youtube.com/channel/UCZNwOenALcKcJTELojwSY3A" target="_blank" rel="nofollow"></a>
-		</li>  {% endcomment %}
-</ul>
+
+		<li>{% show_all_tags %}</li>
+	</ul>
 </td>
 <!-- Конец Sidebar'а -->
 <td valign="top" class="content">

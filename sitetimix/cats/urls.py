@@ -12,4 +12,5 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path("post/<slug:post_slug>/", views.show_post, name='post'),
     path("species/<slug:spec_slug>/", views.show_species, name='species'),
+    path("tag/<slug:tag_slug>/", views.show_tagpost, name='tag') 
 ]

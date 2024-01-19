@@ -1,5 +1,18 @@
 {% extends 'base.html' %}
 
+{% block breadcrumbs %}
+
+{% with post.tags.all as tags %}
+{% if tags %}
+<ul class="tags-list">
+    <li>Теги:</li>
+    {% for t in tags %}
+        <li><a href="{{t.get_absolute_url}}">{{t.tag}}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
 
 {% block content %}
 <h1 align="center">{{ post.title }}</h1>
@@ -9,7 +22,7 @@
 {% endif %}
 
 
-{% comment %} {{ post.content|linebreaks}} {% endcomment %}
+
 {% if post.title == "Абиссинская кошка"%}
     <p align="center"><img src="https://www.purina.ru/sites/default/files/styles/nppe_breed_selector_500/public/2020-04/cat_abyssinian_0.jpg?itok=ZVHMdIdD"></p>
 {% endif %}
