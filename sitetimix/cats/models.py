@@ -1,9 +1,10 @@
 from django.db import models
 from django.urls import reverse
 # https://docs.djangoproject.com/en/4.2/ref/models/fields/
+# https://docs.djangoproject.com/en/4.2/ref/models/querysets/
 
-class PublishedManager(models.Manager): # переопределили стандартный менеджер "objects"
-    def get_queryset(self): # извлечения данных из бд
+class PublishedManager(models.Manager): 
+    def get_queryset(self):
         return super().get_queryset().filter(is_published=Cat.Status.PUBLISHED)
 
 class Cat(models.Model):
@@ -20,7 +21,7 @@ class Cat(models.Model):
     time_update = models.DateTimeField(auto_now=True)  
     is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
     spec = models.ForeignKey("Species", on_delete=models.PROTECT, related_name="posts") 
-    tags = models.ManyToManyField("TagPost", blank=True, related_name="tags")                                       
+    tags = models.ManyToManyField("TagPost", blank=True, related_name="tags")                              
     owner = models.OneToOneField(
         "Owner", on_delete=models.SET_NULL, null=True, blank=True
         )
@@ -31,19 +32,19 @@ class Cat(models.Model):
     
     def __str__(self) -> str:
         return self.title
-
+    
     # https://docs.djangoproject.com/en/4.2/ref/models/options/
     class Meta:
         ordering = ["-time_create"]
         indexes = [
             models.Index(fields=["-time_create"]),  # Ускоряет поиск по полю, но увеличивает объем данных
-        ]
+        ] # неявный порядок сортировки
     
     def get_absolute_url(self):
         return reverse('post', kwargs={"post_slug": self.slug}) 
     
 
-class Species(models.Model): # Категория: Породы
+class Species(models.Model):
     name = models.CharField(max_length=100, db_index=True) 
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
     
