@@ -14,16 +14,16 @@ class Cat(models.Model):
         PUBLISHED = 1, "Опубликовано"
 
     # Последовательность полей по умолчанию будет последовательной
-    title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, unique=True, db_index=True) 
-    content = models.TextField(blank=True)
-    time_create = models.DateTimeField(auto_now_add=True)
-    time_update = models.DateTimeField(auto_now=True)  
-    is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
-    spec = models.ForeignKey("Species", on_delete=models.PROTECT, related_name="posts") 
-    tags = models.ManyToManyField("TagPost", blank=True, related_name="tags")                              
+    title = models.CharField(max_length=255, verbose_name="Заголовок")
+    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="Slug") 
+    content = models.TextField(blank=True, verbose_name="Текст статьи")
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
+    time_update = models.DateTimeField(auto_now=True, verbose_name="Время изменения")  
+    is_published = models.IntegerField(choices=Status.choices, default=Status.PUBLISHED, verbose_name="Статус")
+    spec = models.ForeignKey("Species", on_delete=models.PROTECT, related_name="posts", verbose_name="Породы") 
+    tags = models.ManyToManyField("TagPost", blank=True, related_name="tags", verbose_name="Теги")                              
     owner = models.OneToOneField(
-        "Owner", on_delete=models.SET_NULL, null=True, blank=True
+        "Owner", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Хозяин"
         )
     
     objects = models.Manager() 
@@ -35,6 +35,9 @@ class Cat(models.Model):
     
     # https://docs.djangoproject.com/en/4.2/ref/models/options/
     class Meta:
+        verbose_name = "Котик"
+        verbose_name_plural = "Котики"
+        
         ordering = ["-time_create"]
         indexes = [
             models.Index(fields=["-time_create"]),  # Ускоряет поиск по полю, но увеличивает объем данных
@@ -45,8 +48,12 @@ class Cat(models.Model):
     
 
 class Species(models.Model):
-    name = models.CharField(max_length=100, db_index=True) 
+    name = models.CharField(max_length=100, db_index=True, verbose_name="Породы") 
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
+    
+    class Meta:
+        verbose_name = "Порода"
+        verbose_name_plural = "Породы"
     
     def __str__(self):
         return self.name

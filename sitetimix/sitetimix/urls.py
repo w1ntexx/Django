@@ -26,3 +26,6 @@ urlpatterns = [
 ]
 
 handler404 = page_not_found
+
+admin.site.site_header = "ADMIN"
+admin.site.index_title = "Коты, котики "
