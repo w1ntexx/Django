@@ -56,9 +56,9 @@ ROOT_URLCONF = "sitetimix.urls"
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "BACKEND": "django.template.backends.django.DjangoTemplates", 
         "DIRS": [
-            BASE_DIR / "templates",
+            BASE_DIR / "templates", # отсюда берет base.html для extxend
         ],
         "APP_DIRS": True,
         "OPTIONS": {

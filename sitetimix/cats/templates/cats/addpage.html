@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<form action="">
+    <p><label for="id_1">Nickname: </label><input type="text", id="id_1"></p>
+    <p><label for="id_2">Password: </label><input type="password", id="id_2"></p>
+    <p><label for="id_3">Number: </label><input type="number", id="id_3"></p>
+    <p><label for="id_4">Marka: </label><input type="checkbox", id="id_4"></p>
+    <p><button type="submit">Отправить</button></p>
+</form>
+{% endblock %}
