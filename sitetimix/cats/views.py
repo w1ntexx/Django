@@ -8,7 +8,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify, first
-from cats.models import Cat, Species, TagPost
+from .models import Cat, Species, TagPost
+from .forms import AddPostForm
 
 
 menu = [
@@ -54,7 +55,19 @@ def show_post(request, post_slug):
 
 
 def add_page(request):
-    return render(request, "cats/addpage.html", {"menu": menu, "title": "Добавления статьи"})
+    if request.method == "POST":
+        form = AddPostForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+    else:
+        form = AddPostForm()
+    
+    data = {
+       "menu": menu,
+       "title": "Добавления статьи",
+       "form": form,
+       }
+    return render(request, "cats/addpage.html", data)
 
 
 def contact(request):

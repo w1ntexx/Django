@@ -27,7 +27,7 @@ class CatAdmin(admin.ModelAdmin):
     # readonly_fields = ["slug"] 
     prepopulated_fields = {"slug": ("title", )} # автозаполнение
     list_display = ("title", "time_create", "is_published", "spec", "brief_info")
-    list_display_links = ("title", )
+    list_display_links = ("title",)
     # сортировка исключительно для админ панели
     ordering = ["-time_create", "title"] 
     # если мы что-то добавляем в editable должны убрать из links
@@ -57,3 +57,7 @@ class CatAdmin(admin.ModelAdmin):
 class SpeciesAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
     list_display_links = ("id", "name")
+    
+
+
+    
