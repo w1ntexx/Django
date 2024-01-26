@@ -4,7 +4,10 @@
 <h1>{{ title }}</h1>
 <form action="" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% for f in form %}
+        <p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}</p>
+        <div class="form-error">{{ f.errors}}</div>
+    {% endfor %}
     <p><button type="submit">Отправить</button></p>
 </form>
 {% endblock %}
