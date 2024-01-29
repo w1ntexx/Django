@@ -1,3 +1,4 @@
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 from django.urls import reverse
 
@@ -15,16 +16,55 @@ class Cat(models.Model):
         PUBLISHED = 1, "Опубликовано"
 
     # Последовательность полей по умолчанию будет последовательной
-    title = models.CharField(max_length=255, verbose_name="Заголовок")
-    slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="Slug") 
-    content = models.TextField(blank=True, verbose_name="Текст статьи")
-    time_create = models.DateTimeField(auto_now_add=True, verbose_name="Время создания")
-    time_update = models.DateTimeField(auto_now=True, verbose_name="Время изменения")  
-    is_published = models.IntegerField(choices=Status.choices, default=Status.PUBLISHED, verbose_name="Статус")
-    spec = models.ForeignKey("Species", on_delete=models.PROTECT, related_name="posts", verbose_name="Породы") 
-    tags = models.ManyToManyField("TagPost", blank=True, related_name="tags", verbose_name="Теги")                              
+    title = models.CharField(
+        max_length=255,
+        verbose_name="Заголовок",
+        )
+    slug = models.SlugField(
+        max_length=100,
+        unique=True,
+        db_index=True,
+        verbose_name="Slug",
+        validators=[
+                MinLengthValidator(5, message="Минимум 5 символов"),
+                MaxLengthValidator(100, message="Максимум 100 символов"),
+                ]
+        ) 
+    content = models.TextField(
+        blank=True,
+        verbose_name="Текст статьи",
+        )
+    time_create = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Время создания",
+        )
+    time_update = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Время изменения",
+        )  
+    is_published = models.IntegerField(
+        choices=Status.choices,
+        default=Status.PUBLISHED,
+        verbose_name="Статус",
+        )
+    spec = models.ForeignKey(
+        "Species",
+        on_delete=models.PROTECT,
+        related_name="posts",
+        verbose_name="Породы",
+        ) 
+    tags = models.ManyToManyField(
+        "TagPost",
+        blank=True,
+        related_name="tags",
+        verbose_name="Теги",
+        )                              
     owner = models.OneToOneField(
-        "Owner", on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Хозяин"
+        "Owner",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Хозяин",
         )
     
     objects = models.Manager() 
@@ -49,8 +89,16 @@ class Cat(models.Model):
     
 
 class Species(models.Model):
-    name = models.CharField(max_length=100, db_index=True, verbose_name="Породы") 
-    slug = models.SlugField(max_length=255, unique=True, db_index=True)
+    name = models.CharField(
+        max_length=100,
+        db_index=True,
+        verbose_name="Породы"
+        ) 
+    slug = models.SlugField(
+        max_length=255,
+        unique=True,
+        db_index=True
+        )
     
     class Meta:
         verbose_name = "Порода"
@@ -65,8 +113,14 @@ class Species(models.Model):
 
 
 class TagPost(models.Model):
-    tag = models.CharField(max_length=100, db_index=True)
-    slug = models.SlugField(max_length=255, unique=True)
+    tag = models.CharField(
+        max_length=100,
+        db_index=True
+        )
+    slug = models.SlugField(
+        max_length=255,
+        unique=True
+        )
     
     
     def __str__(self):
@@ -79,7 +133,7 @@ class TagPost(models.Model):
 class Owner(models.Model):
     name = models.CharField(max_length=100)
     
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 

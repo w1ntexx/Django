@@ -58,10 +58,9 @@ def add_page(request):
     if request.method == "POST":
         form = AddPostForm(request.POST)
         if form.is_valid():
-            # print(form.cleaned_data)
             try:
                 Cat.objects.create(**form.cleaned_data)
-                return redirect("home")
+                return redirect('home')
             except:
                 form.add_error(None, "Ошибка добавления поста")
     else:
@@ -107,7 +106,3 @@ def show_tagpost(request, tag_slug):
     }
 
     return render(request, "cats/index.html", context=data)
-
-
-def page_not_found(request, exception):
-    return HttpResponseNotFound(f"<h1>Страница не найдена</h1>")
