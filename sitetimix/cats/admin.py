@@ -2,6 +2,7 @@ from typing import Any
 from django.contrib import admin, messages
 from django.db.models.functions import Length
 from django.db.models.query import QuerySet
+from django.utils.safestring import mark_safe
 from .models import Cat, Species
 
 class OwnerFilter(admin.SimpleListFilter):
@@ -22,11 +23,11 @@ class OwnerFilter(admin.SimpleListFilter):
     
 @admin.register(Cat)
 class CatAdmin(admin.ModelAdmin):
-    fields = ["title", "content", "slug", "spec", "owner", "tags"] # поля для редактирования
+    fields = ["title", "content", "photo", "post_photo", "slug", "spec", "owner", "tags"] # поля для редактирования
     # exclude - иключает поля для редактирования
-    # readonly_fields = ["slug"] 
+    readonly_fields = ["post_photo"] 
     prepopulated_fields = {"slug": ("title", )} # автозаполнение
-    list_display = ("title", "time_create", "is_published", "spec", "brief_info")
+    list_display = ("title", "post_photo", "time_create", "is_published", "spec")
     list_display_links = ("title",)
     # сортировка исключительно для админ панели
     ordering = ["-time_create", "title"] 
@@ -36,12 +37,14 @@ class CatAdmin(admin.ModelAdmin):
     actions = ["set_published", "set_draft"] # действия админки
     search_fields = ["title__icontains", "spec__name"] # через __ можно писать люкапы
     list_filter = [OwnerFilter, "spec__name", "is_published"] 
+    save_on_top = True
     
      
-    @admin.display(description="Краткое описание", ordering=Length("content"))
-    def brief_info(self, cat: Cat):
-        return f"Описание: {len(cat.content)} символов"
-    
+    @admin.display(description="Изображение", ordering="content")
+    def post_photo(self, cat: Cat):
+        if cat.photo:
+            return mark_safe(f"<img src={cat.photo.url} alt={cat.title} width=50>")
+        return "Без фото"
     @admin.action(description="Опубликовать выбранные записи")
     def set_published(self, request, queryset):
         count = queryset.update(is_published=Cat.Status.PUBLISHED)
