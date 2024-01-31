@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.http import (
     HttpResponse,
     HttpResponseNotFound,
@@ -8,7 +6,7 @@ from django.http import (
 )
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.defaultfilters import slugify, first
-from .models import Cat, Species, TagPost
+from .models import Cat, Species, TagPost, UploadFile
 from .forms import AddPostForm, UploadFileForm
 from django.core.files.storage import default_storage
 
@@ -36,16 +34,12 @@ def index(request):
     return render(request, "cats/index.html", data)
 
 
-def handle_uploaded_file(file):
-    with open(f"uploads/{file.name}", "wb+") as destination:
-        for chunk in file.chunks():
-            destination.write(chunk)
-
 def about(request):
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
-            handle_uploaded_file(form.cleaned_data["file"])
+            fp = UploadFile(file=form.cleaned_data["file"])
+            fp.save()
     else:
         form = UploadFileForm()
     return render(request, "cats/about.html",
@@ -67,7 +61,7 @@ def show_post(request, post_slug):
 
 def add_page(request):
     if request.method == "POST":
-        form = AddPostForm(request.POST)
+        form = AddPostForm(request.POST, request.FILES)
         
         if form.is_valid():
             try:

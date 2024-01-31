@@ -32,6 +32,12 @@ class Cat(models.Model):
         #         MaxLengthValidator(100, message="Максимум 100 символов"),
         #         ]
         ) 
+    photo = models.ImageField(
+        upload_to="photos/%Y/%m/%d",
+        default=None,
+        blank=True,
+        null=True,
+        verbose_name="Фото")
     content = models.TextField(
         blank=True,
         verbose_name="Текст статьи",
@@ -142,4 +148,5 @@ class Owner(models.Model):
     def __str__(self) -> str:
         return self.name
 
-
+class UploadFile(models.Model):
+    file = models.FileField(upload_to="uploads_model")
