@@ -1,6 +1,7 @@
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import models
 from django.urls import reverse
+import transliterate
 
 # https://docs.djangoproject.com/en/4.2/ref/models/fields/
 # https://docs.djangoproject.com/en/4.2/ref/models/querysets/
@@ -25,10 +26,11 @@ class Cat(models.Model):
         unique=True,
         db_index=True,
         verbose_name="Slug",
-        validators=[
-                MinLengthValidator(5, message="Минимум 5 символов"),
-                MaxLengthValidator(100, message="Максимум 100 символов"),
-                ]
+        blank=True
+        # validators=[
+        #         MinLengthValidator(5, message="Минимум 5 символов"),
+        #         MaxLengthValidator(100, message="Максимум 100 символов"),
+        #         ]
         ) 
     content = models.TextField(
         blank=True,
@@ -66,6 +68,10 @@ class Cat(models.Model):
         blank=True,
         verbose_name="Хозяин",
         )
+    
+    def save(self, *args, **kwargs):
+        self.slug = transliterate.slugify(self.title)
+        super().save(*args, **kwargs)
     
     objects = models.Manager() 
     published = PublishedManager()

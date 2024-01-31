@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.http import (
     HttpResponse,
     HttpResponseNotFound,
@@ -5,11 +7,12 @@ from django.http import (
     HttpResponseRedirect,
 )
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
-from django.template.loader import render_to_string
 from django.template.defaultfilters import slugify, first
 from .models import Cat, Species, TagPost
-from .forms import AddPostForm
+from .forms import AddPostForm, UploadFileForm
+from django.core.files.storage import default_storage
+
+
 
 
 menu = [
@@ -33,12 +36,20 @@ def index(request):
     return render(request, "cats/index.html", data)
 
 
+def handle_uploaded_file(file):
+    with open(f"uploads/{file.name}", "wb+") as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
 def about(request):
-    data = {
-        "title": "О сайте",
-        "menu": menu,
-    }
-    return render(request, "cats/about.html", context=data)
+    if request.method == "POST":
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(form.cleaned_data["file"])
+    else:
+        form = UploadFileForm()
+    return render(request, "cats/about.html",
+                  {"title": "О сайте", "menu": menu, "form": form })
 
 
 def show_post(request, post_slug):
@@ -57,12 +68,14 @@ def show_post(request, post_slug):
 def add_page(request):
     if request.method == "POST":
         form = AddPostForm(request.POST)
+        
         if form.is_valid():
             try:
-                Cat.objects.create(**form.cleaned_data)
-                return redirect('home')
-            except:
-                form.add_error(None, "Ошибка добавления поста")
+                form.save()
+                return redirect("home")
+            except Exception as e:
+                print(e)
+    
     else:
         form = AddPostForm()
     
@@ -75,7 +88,7 @@ def add_page(request):
 
 
 def contact(request):
-    return HttpResponse("Обратная связь")
+    return render(request, "cats/contact.html", {"menu": menu})
 
 
 def login(request):
@@ -102,7 +115,7 @@ def show_tagpost(request, tag_slug):
         "title": f"Тег: {tag.tag}",
         "menu": menu,
         "posts": posts,
-        "cat_selected": None,  # когда выбран тег, ни одна из категорий не должна быть выделена
+        "cat_selected": None,
     }
 
     return render(request, "cats/index.html", context=data)
