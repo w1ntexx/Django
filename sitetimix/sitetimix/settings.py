@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "livereload",
     "django.contrib.staticfiles",
     "django_extensions",
     "cats.apps.CatsConfig",
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "livereload.middleware.LiveReloadScript",
 ]
 
 ROOT_URLCONF = "sitetimix.urls"

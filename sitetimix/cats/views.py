@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from django.http import (
     HttpResponse,
     HttpResponseNotFound,
@@ -10,7 +11,7 @@ from .models import Cat, Species, TagPost, UploadFile
 from .forms import AddPostForm, UploadFileForm
 from django.core.files.storage import default_storage
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 
 
@@ -23,7 +24,6 @@ menu = [
 ]
 
 
-# Главная страница, которая рендрит шаблон index.html
 # def index(request):
 #     posts = Cat.published.all().order_by("title").select_related("spec")
 
@@ -36,14 +36,18 @@ menu = [
 #     return render(request, "cats/index.html", data)
 
 
-class CatHome(TemplateView):
-    template_name = "cats/index.html"
+class CatHome(ListView):
+    model = Cat 
+    template_name = "cats/index.html" # стандартный путь предпологает _list.html, мы его переопределяем
+    context_object_name = "posts" # стандартное имя object_list, мы его переопределяем для перебора в html-документе
     extra_context = {
         "title": "Главная страница",
         "menu": menu,
-        "posts": Cat.published.all().order_by("title").select_related("spec"),
         "spec_selected": 0,
     }
+    
+    def get_queryset(self):
+        return Cat.published.all().order_by("title").select_related("spec")
 
 def about(request):
     if request.method == "POST":
@@ -53,6 +57,7 @@ def about(request):
             fp.save()
     else:
         form = UploadFileForm()
+        
     return render(request, "cats/about.html",
                   {"title": "О сайте", "menu": menu, "form": form })
 
@@ -114,27 +119,62 @@ def login(request):
     return HttpResponse("Авторизация")
 
 
-def show_species(request, spec_slug):
-    species = get_object_or_404(Species, slug=spec_slug)
-    posts = Cat.published.filter(spec_id=species.pk).select_related("spec")
+# def show_species(request, spec_slug):
+#     species = get_object_or_404(Species, slug=spec_slug)
+#     posts = Cat.published.filter(spec_id=species.pk).select_related("spec")
 
-    data = {
-        "title": "Отображение по рубрикам",
-        "menu": menu,
-        "posts": posts,
-        "spec_selected": species.id,
-    }
-    return render(request, "cats/index.html", context=data)
+#     data = {
+#         "title": "Отображение по рубрикам",
+#         "menu": menu,
+#         "posts": posts,
+#         "spec_selected": species.id,
+#     }
+#     return render(request, "cats/index.html", context=data)
 
 
-def show_tagpost(request, tag_slug):
-    tag = get_object_or_404(TagPost, slug=tag_slug)
-    posts = tag.tags.filter(is_published=Cat.Status.PUBLISHED)
-    data = {
-        "title": f"Тег: {tag.tag}",
-        "menu": menu,
-        "posts": posts,
-        "cat_selected": None,
-    }
+class CatSpecies(ListView):
+    template_name = "cats/index.html"
+    context_object_name = "posts"
+    allow_empty = False
+    
+    def get_queryset(self):
+        return Cat.published.filter(spec__slug=self.kwargs["spec_slug"]).select_related("spec")
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        spec = context["posts"][0].spec
+        context["title"] = f"Категория - {spec.name}"
+        context["menu"] = menu
+        context["spec_selected"] = spec.id
+        return context
+    
+    
+# def show_tagpost(request, tag_slug):
+#     tag = get_object_or_404(TagPost, slug=tag_slug)
+#     posts = tag.tags.filter(is_published=Cat.Status.PUBLISHED)
+#     data = {
+#         "title": f"Тег: {tag.tag}",
+#         "menu": menu,
+#         "posts": posts,
+#         "cat_selected": None,
+#     }
 
-    return render(request, "cats/index.html", context=data)
+#     return render(request, "cats/index.html", context=data)
+
+
+class CatTag(ListView):
+    template_name = "cats/index.html"
+    context_object_name = "posts"
+    allow_empty = False
+    
+    def get_queryset(self):
+        return Cat.published.filter(tags__slug=self.kwargs["tag_slug"])
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tag = context["posts"][0].tags.all()[0]
+        context["title"] = f"Тег - {tag.tag}"  
+        context["menu"] = menu
+        context["cat_selected"] = None
+        return context
+   
