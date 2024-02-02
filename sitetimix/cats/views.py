@@ -9,6 +9,8 @@ from django.template.defaultfilters import slugify, first
 from .models import Cat, Species, TagPost, UploadFile
 from .forms import AddPostForm, UploadFileForm
 from django.core.files.storage import default_storage
+from django.views import View
+from django.views.generic import TemplateView
 
 
 
@@ -22,17 +24,26 @@ menu = [
 
 
 # Главная страница, которая рендрит шаблон index.html
-def index(request):
-    posts = Cat.published.all().order_by("title").select_related("spec")
+# def index(request):
+#     posts = Cat.published.all().order_by("title").select_related("spec")
 
-    data = {
+#     data = {
+#         "title": "Главная страница",
+#         "menu": menu,
+#         "posts": posts,
+#         "spec_selected": 0,
+#     }
+#     return render(request, "cats/index.html", data)
+
+
+class CatHome(TemplateView):
+    template_name = "cats/index.html"
+    extra_context = {
         "title": "Главная страница",
         "menu": menu,
-        "posts": posts,
+        "posts": Cat.published.all().order_by("title").select_related("spec"),
         "spec_selected": 0,
     }
-    return render(request, "cats/index.html", data)
-
 
 def about(request):
     if request.method == "POST":
@@ -59,26 +70,40 @@ def show_post(request, post_slug):
     return render(request, "cats/post.html", data)
 
 
-def add_page(request):
-    if request.method == "POST":
-        form = AddPostForm(request.POST, request.FILES)
-        
-        if form.is_valid():
-            try:
-                form.save()
-                return redirect("home")
-            except Exception as e:
-                print(e)
+# def add_page(request):
+#     if request.method == "POST":
+#         form = AddPostForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("home")
+
+#     else:
+#         form = AddPostForm()
     
-    else:
-        form = AddPostForm()
-    
-    data = {
+#     data = {
+#        "menu": menu,
+#        "title": "Добавления статьи",
+#        "form": form,
+#        }
+#     return render(request, "cats/addpage.html", data)
+
+
+class AddPage(View):
+    def data(self, form=None):
+        data = {
        "menu": menu,
        "title": "Добавления статьи",
        "form": form,
        }
-    return render(request, "cats/addpage.html", data)
+        return data
+    
+    def get(self, request):
+        data = self.data(AddPostForm())
+        return render(request, "cats/addpage.html", data)
+    
+    def post(self, request):
+        data = self.data(AddPostForm(request.POST, request.FILES))
+        return render(request, "cats/addpage.html", data)
 
 
 def contact(request):
