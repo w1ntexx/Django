@@ -22,7 +22,7 @@ class Cat(models.Model):
         verbose_name="Заголовок",
         )
     slug = models.SlugField(
-        max_length=100,
+        max_length=100, 
         unique=True,
         db_index=True,
         verbose_name="Slug",

@@ -15,3 +15,5 @@ urlpatterns = [
     path("tag/<slug:tag_slug>/", views.TagPostList.as_view(), name='tag'),
     path("edit/<slug:slug>/", views.UpdatePage.as_view(), name='edit_page') 
 ]
+
+
