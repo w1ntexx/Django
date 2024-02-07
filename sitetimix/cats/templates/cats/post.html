@@ -18,8 +18,11 @@
 <h1 align="center">{{ post.title }}</h1>
 
 {% if post.photo %}
-    <p><img class="img-article-center" src={{post.photo.url}}></p>
+<div class=centered-image>
+    <p><img src={{post.photo.url}} width="500" height="473" alt="{{ post.title }}"></p>
+</div>
 {% endif %}
 
-<p align="center">{{ post.content|linebreaks }}</p>
+{% comment %} <p class="image-text">{{ post.content|linebreaks }}</p> {% endcomment %}
+<p class="image-text">{{ post.content }}</p>
 {% endblock %}

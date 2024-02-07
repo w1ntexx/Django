@@ -91,9 +91,9 @@ class Cat(models.Model):
         verbose_name = "Котик"
         verbose_name_plural = "Котики"
         
-        ordering = ["-time_create"]
+        ordering = ["title", ]
         indexes = [
-            models.Index(fields=["-time_create"]),  # Ускоряет поиск по полю, но увеличивает объем данных
+            models.Index(fields=["title"]),  # Ускоряет поиск по полю, но увеличивает объем данных
         ] # неявный порядок сортировки
     
     def get_absolute_url(self):

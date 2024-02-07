@@ -407,3 +407,85 @@ ul.lang-list li a:hover {color: #fdc073;}
     min-width: 200px;
     font-size: 16px;
 }
+
+h1 {
+	font-family: Arial, sans-serif;
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 1.5;
+}
+
+h2 {
+	font-family: Verdana, sans-serif;
+	font-size: 20px;
+	font-weight: normal;
+	line-height: 1.5;
+}
+
+h3 {
+	font-family: Tahoma, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	line-height: 1.5;
+}
+
+p {
+	font-family: Verdana, sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+.centered-image img {
+    display: block;
+    margin: 0 auto;
+}
+
+.image-text {
+    margin-top: 50px; 
+    text-align: center;
+}
+
+.list-pages {
+	text-align: center;
+	margin: 0 0 20px 0;
+ }
+ 
+ .list-pages ul {
+	margin: 20px 0 0 0;
+	padding: 0;
+	list-style: none;
+ }
+ 
+ .list-pages ul li {
+	display: inline-block;
+	margin: 0 20px 0 0;
+ }
+ 
+ .list-pages a {
+	color: #000;
+	font-size: 24px;
+	text-decoration: none;
+ }
+ 
+ .list-pages .page-num, .page-num-selected {
+	display: inline-block;
+	width: 60px;
+	height: 44px;
+	padding: 16px 0 0 0;
+	border: 1px solid #d0d0d0;
+	border-radius: 30px;
+ }
+ 
+ .list-pages .page-num:hover {
+	box-shadow: 3px 3px 1px #d0d0d0;
+ }
+ 
+ .list-pages .page-num-selected {
+	border: none;
+	color: #000;
+	font-size: 20px;
+ }
+ 
+ .list-pages .page-num-selected:hover {
+	box-shadow: none;
+ }

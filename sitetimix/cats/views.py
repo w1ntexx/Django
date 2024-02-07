@@ -5,10 +5,10 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 
 from .utils import DataMixin
-from .models import Cat, TagPost, UploadFile
-from .forms import AddPostForm, UploadFileForm
+from .models import Cat, TagPost
+from .forms import AddPostForm
 from django.core.files.storage import default_storage
-from django.views import View
+from django.core.paginator import Paginator
 from django.views.generic import (
     ListView,
     DetailView,
@@ -25,21 +25,18 @@ class CatHome(DataMixin, ListView):
     spec_selected = 0
     
     def get_queryset(self):
-        return Cat.published.all().order_by("title").select_related("spec")
+        return Cat.published.all().select_related("spec")
 
 
 def about(request):
-    if request.method == "POST":
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            fp = UploadFile(file=form.cleaned_data["file"])
-            fp.save()
-    else:
-        form = UploadFileForm()
+    contact_list = Cat.published.all()
+    paginator = Paginator(contact_list, 3)
+    
+    
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
-    return render(
-        request, "cats/about.html", {"title": "О сайте", "form": form}
-    )
+    return render(request, "cats/about.html", {"title": "О сайте", "page_obj": page_obj})
 
 
 class ShowPost(DataMixin, DetailView):
