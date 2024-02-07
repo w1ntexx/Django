@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "cats.apps.CatsConfig",
+    "users.apps.UsersConfig",
     "debug_toolbar",
 ]
 

@@ -1,6 +1,6 @@
 from django import template
 from cats.models import Species, TagPost
-from django.db.models import Count
+from django.db.models import Count, Q
 
 import cats.views as views
 
@@ -13,7 +13,7 @@ register = template.Library()
 # и регистрация происходит через словарь.
 @register.inclusion_tag("cats/list_categories.html")  # путь к templates/apps/template.html
 def show_categories(spec_selected=0):
-    specs = Species.objects.annotate(total=Count("posts")).filter(total__gt=0)
+    specs = Species.objects.annotate(total=Count("posts")).filter(posts__is_published=True).filter(total__gt=0)
     return {"specs": specs, "spec_selected": spec_selected}
 
 @register.inclusion_tag("cats/list_tags.html")
