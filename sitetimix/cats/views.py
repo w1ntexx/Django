@@ -79,8 +79,7 @@ class CatSpecies(DataMixin, ListView):
     allow_empty = False
 
     def get_queryset(self):
-        return Cat.published.filter(
-            spec__slug=self.kwargs["spec_slug"]).select_related("spec")
+        return Cat.published.filter(spec__slug=self.kwargs["spec_slug"]).select_related("spec")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

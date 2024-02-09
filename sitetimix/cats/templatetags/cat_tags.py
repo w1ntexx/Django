@@ -1,6 +1,7 @@
 from django import template
 from cats.models import Species, TagPost
 from django.db.models import Count, Q
+from cats.utils import menu 
 
 import cats.views as views
 
@@ -8,10 +9,11 @@ import cats.views as views
 
 register = template.Library()
 
+@register.simple_tag
+def get_menu():
+    return menu
 
-# Include Tage используется для определенных шаблонов,
-# и регистрация происходит через словарь.
-@register.inclusion_tag("cats/list_categories.html")  # путь к templates/apps/template.html
+@register.inclusion_tag("cats/list_categories.html")  
 def show_categories(spec_selected=0):
     specs = Species.objects.annotate(total=Count("posts")).filter(posts__is_published=True).filter(total__gt=0)
     return {"specs": specs, "spec_selected": spec_selected}

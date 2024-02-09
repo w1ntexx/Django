@@ -489,3 +489,8 @@ p {
  .list-pages .page-num-selected:hover {
 	box-shadow: none;
  }
+
+ ul.mainmenu li.last {
+	float: right;
+	margin-right: 70px;
+ }
