@@ -1,4 +1,4 @@
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 import transliterate
@@ -74,6 +74,13 @@ class Cat(models.Model):
         blank=True,
         verbose_name="Хозяин",
         )
+    author = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.SET_NULL,
+        null=True,
+        default=None,
+        related_name="author"
+    )
     
     def save(self, *args, **kwargs):
         self.slug = transliterate.slugify(self.title)

@@ -1,13 +1,9 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.base import Model as Model
 from django.http import HttpResponse
-
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
-
-from .utils import DataMixin
-from .models import Cat, TagPost
-from .forms import AddPostForm
-from django.core.files.storage import default_storage
 from django.core.paginator import Paginator
 from django.views.generic import (
     ListView,
@@ -15,6 +11,10 @@ from django.views.generic import (
     CreateView,
     UpdateView,
 )
+
+from .utils import DataMixin
+from .models import Cat, TagPost
+from .forms import AddPostForm
 
 
 
@@ -27,7 +27,7 @@ class CatHome(DataMixin, ListView):
     def get_queryset(self):
         return Cat.published.all().select_related("spec")
 
-
+@login_required
 def about(request):
     contact_list = Cat.published.all()
     paginator = Paginator(contact_list, 3)
@@ -52,10 +52,17 @@ class ShowPost(DataMixin, DetailView):
         return get_object_or_404(Cat.published, slug=self.kwargs[self.slug_url_kwarg])
 
 
-class AddPage(DataMixin, CreateView):
+class AddPage(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = "cats/addpage.html"
     title_page = "Добавления статьи"
+    
+    def form_valid(self, form):
+        cat = form.save(commit=False)
+        cat.author = self.request.user
+        return super().form_valid(form)
+    
+    
     
     
 class UpdatePage(DataMixin, UpdateView):

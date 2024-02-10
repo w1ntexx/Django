@@ -133,3 +133,4 @@ MEDIA_URL = "/media/"
 
 LOGIN_REDIRECT_URL = "home"
 LOOGUT_REDIRECT_URL = "home"
+LOGIN_URL = "users:login"

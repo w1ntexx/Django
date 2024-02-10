@@ -4,7 +4,7 @@
 <ul class="list-articles">
 	{% for p in posts %}
 	<li><div class="article-panel">
-		<p class="first">Порода: {{p.spec.name}}</p>
+		<p class="first">Порода: {{p.spec.name}} {% if p.author %}| Автор:{{ p.author.username }} {% endif %}</p>
 		<p class="last">{{p.time_update|date:"d-m-Y"}}</p>
 		</div>
 		{% if p.photo %}
