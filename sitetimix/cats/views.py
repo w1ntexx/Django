@@ -46,7 +46,7 @@ class ShowPost(DataMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return self.get_mixin_context(context, select=1, title=context["post"].title)
+        return self.get_mixin_context(context, title=context["post"].title)
 
     def get_object(self):
         return get_object_or_404(Cat.published, slug=self.kwargs[self.slug_url_kwarg])

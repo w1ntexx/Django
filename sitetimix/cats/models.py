@@ -27,10 +27,6 @@ class Cat(models.Model):
         db_index=True,
         verbose_name="Slug",
         blank=True
-        # validators=[
-        #         MinLengthValidator(5, message="Минимум 5 символов"),
-        #         MaxLengthValidator(100, message="Максимум 100 символов"),
-        #         ]
         ) 
     photo = models.ImageField(
         upload_to="photos/%Y/%m/%d",
@@ -83,8 +79,9 @@ class Cat(models.Model):
     )
     
     def save(self, *args, **kwargs):
-        self.slug = transliterate.slugify(self.title)
-        super().save(*args, **kwargs)
+        if not self.slug:
+            self.slug = transliterate.slugify(self.title)
+            super().save(*args, **kwargs)
     
     objects = models.Manager() 
     published = PublishedManager()
