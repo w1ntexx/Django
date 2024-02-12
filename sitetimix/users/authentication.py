@@ -15,6 +15,6 @@ class EmailAuthBackend(BaseBackend):
     def get_user(self, user_id):
         user_model = get_user_model()
         try:
-            return user_model.objects_get(pk=user_id)
+            return user_model.objects.get(pk=user_id)
         except user_model.DoesNotExist: 
             return None
