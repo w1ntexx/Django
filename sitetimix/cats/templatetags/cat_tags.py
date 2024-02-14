@@ -1,12 +1,9 @@
 from django import template
 from cats.models import Species, TagPost
-from django.db.models import Count, Q
+from django.db.models import Count
 from cats.utils import menu 
-
-import cats.views as views
-
-# https://docs.djangoproject.com/en/4.2/ref/models/database-functions/
-
+    
+    
 register = template.Library()
 
 @register.simple_tag
@@ -21,3 +18,7 @@ def show_categories(spec_selected=0):
 @register.inclusion_tag("cats/list_tags.html")
 def show_all_tags():
     return {"tags": TagPost.objects.annotate(total=Count("tags")).filter(total__gt=0)} 
+
+@register.simple_tag
+def get_photo():
+    pass

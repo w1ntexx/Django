@@ -3,6 +3,8 @@ from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordRes
 from django.db.models.base import Model as Model
 from django.shortcuts import redirect, render
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from sitetimix import settings
 from .forms import LoginUserForm, RegisterUserForm, ProfileUserForm, UserPasswordChangeForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
@@ -23,7 +25,10 @@ class RegisterUser(CreateView):
 class ProfileUser(LoginRequiredMixin, UpdateView):
     form_class = ProfileUserForm
     template_name = "users/profile.html"
-    extra_context = {"title": "Профиль пользователя"}
+    extra_context = {
+        "title": "Профиль пользователя",
+        "default_image": settings.DEFAULT_USER_IMAGE,
+        }
     
     def get_success_url(self):
         return reverse_lazy("users:profile")
