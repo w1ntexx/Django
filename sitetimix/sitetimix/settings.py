@@ -25,8 +25,9 @@ SECRET_KEY = "django-insecure-f@-c_7qmcr6x@kfx3eq)7-5acwzyuw7%&rc=w5+ouk1xttej%r
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-
 INTERNAL_IPS = ["127.0.0.1"]
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -139,3 +140,5 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'users.authentication.EmailAuthBackend'
 ]
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
