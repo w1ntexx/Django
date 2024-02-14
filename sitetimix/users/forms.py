@@ -1,6 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, PasswordChangeForm
 
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(
@@ -36,10 +36,10 @@ class RegisterUserForm(UserCreationForm):
     
     
     class Meta:
+        model = get_user_model()
         style_text = forms.TextInput(attrs={"class": "form-input"})
         style_password = forms.PasswordInput(attrs={"class": "form-input"})
                     
-        model = get_user_model()
         fields = [
             "username",
             "email",

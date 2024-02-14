@@ -21,6 +21,36 @@ class Cat(models.Model):
         max_length=255,
         verbose_name="Заголовок",
         )
+    content = models.TextField(
+        blank=True,
+        verbose_name="Текст статьи",
+        )
+    time_create = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Время создания",
+        )
+    time_update = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Время изменения",
+        ) 
+    is_published = models.IntegerField(
+        choices=Status.choices,
+        default=Status.PUBLISHED,
+        verbose_name="Статус",
+        )
+    spec = models.ForeignKey(
+        "Species",
+        on_delete=models.PROTECT,
+        related_name="posts",
+        verbose_name="Породы",
+        ) 
+    owner = models.OneToOneField(
+        "Owner",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="Хозяин",
+        )
     slug = models.SlugField(
         max_length=100, 
         unique=True,
@@ -34,42 +64,6 @@ class Cat(models.Model):
         blank=True,
         null=True,
         verbose_name="Фото")
-    content = models.TextField(
-        blank=True,
-        verbose_name="Текст статьи",
-        )
-    time_create = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Время создания",
-        )
-    time_update = models.DateTimeField(
-        auto_now=True,
-        verbose_name="Время изменения",
-        )  
-    is_published = models.IntegerField(
-        choices=Status.choices,
-        default=Status.PUBLISHED,
-        verbose_name="Статус",
-        )
-    spec = models.ForeignKey(
-        "Species",
-        on_delete=models.PROTECT,
-        related_name="posts",
-        verbose_name="Породы",
-        ) 
-    tags = models.ManyToManyField(
-        "TagPost",
-        blank=True,
-        related_name="tags",
-        verbose_name="Теги",
-        )                              
-    owner = models.OneToOneField(
-        "Owner",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        verbose_name="Хозяин",
-        )
     author = models.ForeignKey(
         get_user_model(),
         on_delete=models.SET_NULL,
@@ -77,6 +71,13 @@ class Cat(models.Model):
         default=None,
         related_name="author"
     )
+    tags = models.ManyToManyField(
+        "TagPost",
+        blank=True,
+        related_name="tags",
+        verbose_name="Теги",
+        )                              
+
     
     def save(self, *args, **kwargs):
         if not self.slug:
