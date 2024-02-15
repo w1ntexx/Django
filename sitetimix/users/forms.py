@@ -61,12 +61,12 @@ class RegisterUserForm(UserCreationForm):
             "last_name": style_text,
         }
 
-        
-        def clean_email(self):
-            email = self.clean_data["email"]
-            if get_user_model().objects.filter(email=email).exists():
-                raise forms.ValidationError("Такой E-mail уже существует")
-            return email
+    
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if get_user_model().objects.filter(email=email).exists():
+            raise forms.ValidationError("Такой E-mail уже существует")
+        return email
 
 
 class ProfileUserForm(forms.ModelForm):
@@ -92,7 +92,7 @@ class ProfileUserForm(forms.ModelForm):
         style_text = forms.TextInput(attrs={'class': 'form-input'})
         
         model = get_user_model()
-        fields = ["photo", "username", "email", "date_birth", "first_name", "last_name"]
+        fields = ["username", "email", "date_birth", "first_name", "last_name", "photo"]
         labels = {
             "first_name": "Имя",
             "last_name": "Фамилия",
