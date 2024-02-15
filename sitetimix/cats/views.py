@@ -1,5 +1,5 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models.base import Model as Model
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -52,10 +52,12 @@ class ShowPost(DataMixin, DetailView):
         return get_object_or_404(Cat.published, slug=self.kwargs[self.slug_url_kwarg])
 
 
-class AddPage(LoginRequiredMixin, DataMixin, CreateView):
+class AddPage(PermissionRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = "cats/addpage.html"
     title_page = "Добавления статьи"
+    permission_required = "cat.add_cat" # <app>.<action>_<table>
+    
     
     def form_valid(self, form):
         cat = form.save(commit=False)
@@ -65,13 +67,15 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
     
     
     
-class UpdatePage(DataMixin, UpdateView):
+class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     model = Cat
     fields = "__all__"
     template_name = "cats/addpage.html"
     title_page = "Редактирование статьи статьи"
+    permission_required = "cat.change_cat" 
 
 
+@permission_required(perm="cat.view_cat", raise_exception=True)
 def contact(request):
     return render(request, "cats/contact.html")
 

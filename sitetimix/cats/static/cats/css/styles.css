@@ -494,3 +494,7 @@ p {
 	float: right;
 	margin-right: 70px;
  }
+
+ .right-align {
+    text-align: right;
+}

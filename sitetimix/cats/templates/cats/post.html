@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
-{% block breadcrumbs %}
-
+{% block breadcrumbs %} 
+{% if perms.cat.change_cat %}
+<div class="right-align">
+    <p><a href="{% url "edit_page" post.slug %}">Редактировать</a></p>
+</div>
+{% endif %}
 {% with post.tags.all as tags %}
 {% if tags %}
 <ul class="tags-list">
