@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "cats.apps.CatsConfig",
     "users.apps.UsersConfig",
     "debug_toolbar",
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -137,8 +138,9 @@ LOOGUT_REDIRECT_URL = "home"
 LOGIN_URL = "users:login"
 
 AUTHENTICATION_BACKENDS = [
+    'social_core.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    'users.authentication.EmailAuthBackend'
+    'users.authentication.EmailAuthBackend',
 ]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
