@@ -498,3 +498,10 @@ p {
  .right-align {
     text-align: right;
 }
+
+ 
+.list-pages2 .page-num-selected {
+	border: none;
+	color: #6c28af;
+	font-size: 20px;
+ }

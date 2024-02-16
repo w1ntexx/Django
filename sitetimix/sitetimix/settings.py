@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "users.apps.UsersConfig",
     "debug_toolbar",
     'social_django',
+    
 ]
 
 MIDDLEWARE = [
@@ -138,9 +139,9 @@ LOOGUT_REDIRECT_URL = "home"
 LOGIN_URL = "users:login"
 
 AUTHENTICATION_BACKENDS = [
-    'social_core.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',
     'users.authentication.EmailAuthBackend',
+    'social_core.backends.github.GithubOAuth2'
 ]
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -159,3 +160,6 @@ EMAIL_ADMIN = EMAIL_HOST_USER
 AUTH_USER_MODEL = "users.User"
 
 DEFAULT_USER_IMAGE = MEDIA_URL + "users/default.png"
+
+SOCIAL_AUTH_GITHUB_KEY = "15bab4632913a422d815"
+SOCIAL_AUTH_GITHUB_SECRET = "e50cb4481d5fee8ace89b085908a0f73c1b00482"
