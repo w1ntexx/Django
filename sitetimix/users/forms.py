@@ -81,6 +81,7 @@ class ProfileUserForm(forms.ModelForm):
         disabled=True,
         label="E-mail",
         widget=style_text,
+        required=False,
         )
     this_year = datetime.date.today().year
     date_birth = forms.DateField(

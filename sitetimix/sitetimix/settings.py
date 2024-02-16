@@ -163,3 +163,16 @@ DEFAULT_USER_IMAGE = MEDIA_URL + "users/default.png"
 
 SOCIAL_AUTH_GITHUB_KEY = "15bab4632913a422d815"
 SOCIAL_AUTH_GITHUB_SECRET = "e50cb4481d5fee8ace89b085908a0f73c1b00482"
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'users.pipeline.new_users_handler',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
