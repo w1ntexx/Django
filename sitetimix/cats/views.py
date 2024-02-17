@@ -75,13 +75,9 @@ class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     permission_required = "cat.change_cat" 
 
 
-@permission_required(perm="cat.view_cat", raise_exception=True)
+# @permission_required(perm="cat.view_cat", raise_exception=True)
 def contact(request):
-    return render(request, "cats/contact.html")
-
-
-def login(request):
-    return HttpResponse("Авторизация")
+    return render(request, "cats/contact.html", {"title": "Обратная связь"})
 
 
 class CatSpecies(DataMixin, ListView):
