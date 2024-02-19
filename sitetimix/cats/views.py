@@ -65,8 +65,7 @@ class AddPage(PermissionRequiredMixin, DataMixin, CreateView):
         return super().form_valid(form)
     
     
-    
-    
+
 class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     model = Cat
     fields = "__all__"
