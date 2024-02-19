@@ -6,7 +6,7 @@ from django.views.decorators.cache import cache_page
 register_converter(convertor.FourDigitYearConverter, "year4")
 
 urlpatterns = [
-    path("", cache_page(30)(views.CatHome.as_view()), name='home'),
+    path("", views.CatHome.as_view(), name='home'),
     path("about/", views.about, name='about'),
     path('addpage/', views.AddPage.as_view(), name='add_page'),
     path('contact', views.ContactFormView.as_view(), name='contact'),

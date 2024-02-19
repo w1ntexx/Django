@@ -4,6 +4,7 @@ from django.db.models.base import Model as Model
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.core.paginator import Paginator
+from django.core.cache import cache
 from django.views.generic import (
     ListView,
     DetailView,
@@ -11,7 +12,6 @@ from django.views.generic import (
     UpdateView,
     FormView,
 )
-
 from .utils import DataMixin
 from .models import Cat, TagPost
 from .forms import AddPostForm, ContactForm
@@ -25,7 +25,12 @@ class CatHome(DataMixin, ListView):
     spec_selected = 0
     
     def get_queryset(self):
-        return Cat.published.all().select_related("spec")
+        w_lst = cache.get('cat_posts')
+        if not w_lst:
+            w_lst = Cat.published.all().select_related("spec")
+            cache.set('cat_posts', w_lst, 60)
+        
+        return w_lst
 
 @login_required
 def about(request):
