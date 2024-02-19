@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.db.models.base import Model as Model
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
@@ -9,11 +9,12 @@ from django.views.generic import (
     DetailView,
     CreateView,
     UpdateView,
+    FormView,
 )
 
 from .utils import DataMixin
 from .models import Cat, TagPost
-from .forms import AddPostForm
+from .forms import AddPostForm, ContactForm
 
 
 
@@ -75,9 +76,18 @@ class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
 
 
 # @permission_required(perm="cat.view_cat", raise_exception=True)
-def contact(request):
-    return render(request, "cats/contact.html", {"title": "Обратная связь"})
+# def contact(request):
+#     return render(request, "cats/contact.html", {"title": "Обратная связь"})
 
+class ContactFormView(LoginRequiredMixin, DataMixin, FormView):
+    form_class = ContactForm
+    template_name = "cats/contact.html"
+    success_url = reverse_lazy("home")
+    title_page = "Обратная связь"
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super().form_valid(form)
 
 class CatSpecies(DataMixin, ListView):
     template_name = "cats/index.html"

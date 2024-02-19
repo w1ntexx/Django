@@ -42,8 +42,8 @@ INSTALLED_APPS = [
     "cats.apps.CatsConfig",
     "users.apps.UsersConfig",
     "debug_toolbar",
-    'social_django',
-    
+    "social_django",
+    "captcha",
 ]
 
 MIDDLEWARE = [

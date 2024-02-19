@@ -25,7 +25,8 @@ urlpatterns = [
     path("", include("cats.urls")),
     path("users/", include("users.urls", namespace="users")),
     path("__debug__/", include("debug_toolbar.urls")),
-    path('social-auth/', include('social_django.urls', namespace='social'))
+    path('social-auth/', include('social_django.urls', namespace='social')),
+    path('captcha/', include('captcha.urls')),
 ]
 
 
