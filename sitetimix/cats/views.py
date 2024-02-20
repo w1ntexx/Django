@@ -79,10 +79,6 @@ class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     permission_required = "cat.change_cat" 
 
 
-# @permission_required(perm="cat.view_cat", raise_exception=True)
-# def contact(request):
-#     return render(request, "cats/contact.html", {"title": "Обратная связь"})
-
 class ContactFormView(LoginRequiredMixin, DataMixin, FormView):
     form_class = ContactForm
     template_name = "cats/contact.html"
