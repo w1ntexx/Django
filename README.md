@@ -1,30 +1,96 @@
-<h1>SiteCat</h1>
-<p>Это сайт с котами на Django 5.0.1, которые отображаются в виде постов с их описанием, которые можно добавлять/редактировать с правами доступа, которые привязываются к личному профилю через админ-панель. Их можно сортировать по породам и тегам.</p>
-<h1>Stack</h1>
-<ul>
-  <li>Python</li>
-  <li>HTML</li>
-  <li>CSS</li>
-  <li>PostgreSQL</li>
-  <li>Redis</li>
-</ul>
-<h1>Принципы Django</h1>
-<ul>
-  <li>Шаблоны</li>
-  <li>Теги</li>
-  <li>ORM</li>
-  <li>Связи между таблицами</li>
-  <li>Админ-панель</li>
-  <li>Формы</li>
-  <li>Функции представления</li>
-  <li>Классы представления</li>
-  <li>Paginator</li>
-  <li>Mixins</li>
-  <li>Личный профиль</li>
-  <li>EMAIL TLS</li>
-  <li>Авторизация и регистрация</li>
-  <li>OAuth 2.0</li>
-  <li>Permissions & Groups</li>
-</ul>
-<h1>Запуск</h1>
-<p>Сервер запускается через <a href="https://github.com/tjwalch/django-livereload-server">livereload</a></p>
+## Manual Build
+> 👉 Download the code
+```bash
+$ git clone https://github.com/w1ntexx/Django.git
+$ cd sitetimix
+```
+
+<br />
+
+> 👉 Install modules via `VENV`  
+
+```bash
+$ virtualenv env
+$ source env/bin/activate
+$ pip install -r requirements.txt
+```
+<br />
+
+> 👉 Set Up Database
+
+```bash
+$ python manage.py makemigrations
+$ python manage.py migrate
+```
+
+<br />
+
+> 👉 Create the Superuser
+
+```bash
+$ python manage.py createsuperuser
+```
+
+<br />
+
+> 👉 Start the app
+
+Runs with [livereload](https://github.com/tjwalch/django-livereload-server/)
+
+```bash
+$ python manage.py livereload
+$ python manage.py runserver
+```
+
+At this point, the app runs at `http://127.0.0.1:8000/`
+
+<br />
+
+## Codebase structure
+```bash
+< PROJECT ROOT >
+   |
+   |-- sitetimix/                              
+   |    |-- settings.py 
+   |    |-- urls.py
+   |
+   |-- cats/
+   |    |-- views.py
+   |    |-- admin.py
+   |    |-- urls.py
+   |    |-- models.py
+   |    |-- tests.py
+   |    |-- templates/
+   |         |-- cats/
+   |              |-- index.html      
+   |    |-- templatetags/     
+   |         |-- cat_tags.py
+   |     
+   |-- users/
+   |    |-- views.py
+   |    |-- admin.py
+   |    |-- urls.py
+   |    |-- models.py
+   |    |-- tests.py
+   |    |-- context_processors.py
+   |    |-- authentication.py
+   |    |-- templates/
+   |         |-- users/
+   |              |-- profile.html     
+   |
+   |-- templates/
+   |         |-- base.html
+   |
+   |-- media/
+   |    |-- photos/
+   |    |-- social-auth/
+   |    |-- users/
+   |
+   |-- requirements.txt
+   |
+   |-- manage.py
+   |
+   |-- ************************************************************************
+```
+
+<br />
